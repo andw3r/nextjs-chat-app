@@ -1,0 +1,23 @@
+import { db } from "@/lib/db";
+import { getCurrentUser } from "@/actions/getCurrentUser";
+import { NextResponse } from "next/server";
+
+export async function GET(req: Request, { params }: { params: { conversationId: string } }) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) return new NextResponse("Unauthorized", { status: 401 });
+
+  const messages = await db.message.findMany({
+    where: { conversationId: params.conversationId },
+    select: {
+      id: true,
+      body: true,
+      sender: true,
+      seen: true,
+      createdAt: true,
+    },
+    orderBy: { createdAt: "asc" },
+  });
+
+  return NextResponse.json(messages);
+}
