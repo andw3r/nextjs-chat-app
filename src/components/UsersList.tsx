@@ -71,7 +71,7 @@ export default function UsersList() {
           (req: PendingRequest) => req.senderId === session?.user?.id && req.receiverId === user.id
         );
         return (
-          <div key={user?.id} className={`${pathname === "/chat" ? "cursor-pointer" : ""} min-h-14 bg-primary-gray border rounded-xl flex w-60`}>
+          <div key={user?.id} className={`${pathname === "/chat" ? "cursor-pointer" : ""} w-full sm:w-60 min-h-14 bg-primary-gray border rounded-xl flex`}>
             <div className="flex w-full justify-between items-center gap-2 mx-2">
               <div className="flex gap-2 items-center">
                 <ProfilePicture customName={user.name} customPicture={user.image} size={32} />
