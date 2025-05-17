@@ -14,11 +14,7 @@ export default async function ChatLayout({ children } : { children: React.ReactN
   return (
     <div className="flex h-full w-full p-3 gap-3">
       <Sidebar />
-      {/* <div className="flex"> */}
-
-      
       {children}
-      {/* </div> */}
     </div>
   );
 }
