@@ -37,5 +37,9 @@ export async function POST(req: Request) {
     receiverId: session.user.id,
   });
 
+  await pusherServer.trigger(session.user.id, 'friend:confirmed', {
+    senderId,
+  });
+
   return new NextResponse("Friend request accepted", { status: 200 });
 }

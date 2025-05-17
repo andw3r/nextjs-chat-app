@@ -50,5 +50,9 @@ export async function POST(req: Request) {
     senderId: currentUserId,
   });
 
+  await pusherServer.trigger(currentUserId, 'friend:request', {
+    receiverId,
+  });
+  
   return new NextResponse("Friend request sent", { status: 200 });
 }

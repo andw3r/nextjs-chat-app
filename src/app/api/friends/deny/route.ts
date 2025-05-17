@@ -28,10 +28,9 @@ export async function POST(req: Request) {
     where: { id: request.id },
   });
 
-  await pusherServer.trigger(senderId, 'friend:deny', {
-    userId: userId,
-    senderId,
+  await pusherServer.trigger(senderId, 'friend:denied', {
+    receiverId: userId,
   });
-
+  
   return new NextResponse("Friend request deleted", { status: 200 });
 }

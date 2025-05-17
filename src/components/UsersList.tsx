@@ -1,10 +1,8 @@
 "use client";
 
-import { BsPersonCircle } from "react-icons/bs";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { IoCheckmark } from "react-icons/io5";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getAllUsers } from '@/actions/getUserInfo';
 import { useSession } from "next-auth/react";
 import { useSendFriendRequest } from "@/hooks/useSendFriendRequest";
 import PendingRequest from "@/types/PendingRequest";
@@ -39,7 +37,7 @@ export default function UsersList() {
   const { data: sentRequests = [] } = useQuery({
     queryKey: ['sentRequests'],
     queryFn: async () => {
-      const res = await fetch('/api/friends/sent')
+      const res = await fetch('/api/friends/sent');
       return res.json();
     },
 
@@ -49,7 +47,7 @@ export default function UsersList() {
   const { mutate: sendFriendRequest } = useSendFriendRequest();
   const { mutate: deleteFriendRequest } = useDeleteFriendRequest();
 
-    useEffect(() => {
+  useEffect(() => {
     if (!session?.user?.id) return;
 
     pusherClient.subscribe(session.user.id);
@@ -61,8 +59,61 @@ export default function UsersList() {
     pusherClient.bind('friend:request', handler);
 
     return () => {
-      pusherClient.unsubscribe(session?.user?.id as string);
+      pusherClient.unsubscribe(session.user.id as string);
       pusherClient.unbind('friend:request', handler);
+    };
+  }, [session?.user?.id, queryClient]);
+
+  useEffect(() => {
+    if (!session?.user?.id) return;
+
+    pusherClient.subscribe(session.user.id);
+
+    const handler = (data: { senderId: string }) => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['friends'] });
+    };
+
+    pusherClient.bind('friend:accepted', handler);
+
+    return () => {
+      pusherClient.unsubscribe(session.user.id as string);
+      pusherClient.unbind('friend:accepted', handler);
+    };
+  }, [session?.user?.id, queryClient]);
+
+  useEffect(() => {
+    if (!session?.user?.id) return;
+
+    pusherClient.subscribe(session.user.id);
+
+    const handler = (data: { senderId: string }) => {
+      queryClient.invalidateQueries({ queryKey: ['sentRequests'] });
+    };
+
+    pusherClient.bind('friend:accepted', handler);
+
+    return () => {
+      pusherClient.unsubscribe(session.user.id as string);
+      pusherClient.unbind('friend:accepted', handler);
+    };
+  }, [session?.user?.id, queryClient]);
+
+  useEffect(() => {
+    if (!session?.user?.id) return;
+
+    pusherClient.subscribe(session.user.id);
+
+    const handler = (data: { senderId: string }) => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['friends'] });
+    };
+
+    pusherClient.bind('friend:confirmed', handler);
+
+    return () => {
+      pusherClient.unsubscribe(session.user.id as string);
+      pusherClient.unbind('friend:confirmed', handler);
     };
   }, [session?.user?.id, queryClient]);
 
