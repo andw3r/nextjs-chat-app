@@ -1,10 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 
 export function useStartConversation() {
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (userId: string) => {
@@ -24,7 +23,6 @@ export function useStartConversation() {
     },
     onSuccess: (data) => {
       router.push(`/chat/${data.id}`);
-
     },
     onError: (err) => {
       console.error("Error starting conversation:", err);

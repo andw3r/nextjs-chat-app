@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     });
 
     if (existingConversation) {
-      console.log("Conversation already exists:", existingConversation);
+      console.log("Conversation already exists");
       return NextResponse.json(existingConversation);
     }
 

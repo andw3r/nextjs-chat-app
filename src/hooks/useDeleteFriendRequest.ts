@@ -1,18 +1,16 @@
+import PendingRequest from '@/types/PendingRequest';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export function useSendFriendRequest() {
+export function useDeleteFriendRequest() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (receiverId: string) => {
-      const res = await fetch("/api/friends/add", {
-        method: "POST",
+      await fetch("/api/friends/unsend", {
+        method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ receiverId }),
       });
-
-      if (!res.ok) throw new Error("Failed to send friend request");
-      return res.text();
     },
 
     onError: (err) => {

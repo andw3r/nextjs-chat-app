@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher";
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -43,6 +44,10 @@ export async function POST(req: Request) {
       senderId: currentUserId,
       receiverId,
     },
+  });
+
+  await pusherServer.trigger(receiverId, 'friend:request', {
+    senderId: currentUserId,
   });
 
   return new NextResponse("Friend request sent", { status: 200 });
