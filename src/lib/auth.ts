@@ -1,13 +1,13 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaAdapter } from "@auth/prisma-adapter"
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import { db } from "./db";
-import { comparePassword, hashPassword } from "@/utils/hashPassword";
+import { comparePassword } from "@/utils/hashPassword";
 import { signInSchema } from "./zod";
 import { ZodError } from "zod";
 import { UserRole } from "@prisma/client";
-import { getUserByEmail, getUserById, getUserFromDb } from "@/actions/getUserInfo";
+import { getUserByEmail, getUserById } from "@/actions/getUserInfo";
 
 export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
   pages: {

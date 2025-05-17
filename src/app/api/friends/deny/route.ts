@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth,} from "@/lib/auth";
 import { db } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher";
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -25,6 +26,11 @@ export async function POST(req: Request) {
 
   await db.friendRequest.delete({
     where: { id: request.id },
+  });
+
+  await pusherServer.trigger(senderId, 'friend:deny', {
+    userId: userId,
+    senderId,
   });
 
   return new NextResponse("Friend request deleted", { status: 200 });

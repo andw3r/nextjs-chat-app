@@ -7,8 +7,8 @@ export default async function ChatLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-  console.log("Session:", session);
+  
+
   return (
     <div className="flex w-full gap-3">
       <FriendsList />

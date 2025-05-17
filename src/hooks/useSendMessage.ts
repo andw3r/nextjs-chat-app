@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 interface MessageProps {
   message: string;
@@ -6,12 +6,9 @@ interface MessageProps {
 }
 
 export function useSendMessage() {
-
-  const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: async ({message, conversationId}: MessageProps) => {
-      if (!conversationId) throw new Error("Invalid user ID");
+    mutationFn: async ({ message, conversationId }: MessageProps) => {
+      if (!conversationId) throw new Error("Invalid conversation ID");
 
       const res = await fetch("/api/messages", {
         method: "POST",
@@ -20,17 +17,10 @@ export function useSendMessage() {
       });
 
       if (!res.ok) throw new Error("Failed to send message");
-
       return res.json();
-
     },
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['conversation'] }); // this will invalidate the conversation query
-    },
-
     onError: (err) => {
-      console.error("Error starting conversation:", err);
+      console.error("Send message error:", err);
     },
   });
 }

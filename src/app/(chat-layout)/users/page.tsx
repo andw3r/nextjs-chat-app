@@ -1,9 +1,5 @@
 "use client"
-import { getAllUsers } from "@/actions/getUserInfo";
-import UserChatItem from "@/components/UsersList";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 export default function Users() {
 

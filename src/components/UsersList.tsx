@@ -10,6 +10,9 @@ import { useSendFriendRequest } from "@/hooks/useSendFriendRequest";
 import PendingRequest from "@/types/PendingRequest";
 import { usePathname } from "next/navigation";
 import ProfilePicture from "./ProfilePicture";
+import { pusherClient } from "@/lib/pusher";
+import { useEffect } from "react";
+import { useDeleteFriendRequest } from "@/hooks/useDeleteFriendRequest";
 
 interface UserList {
   id: string;
@@ -19,6 +22,7 @@ interface UserList {
 
 export default function UsersList() {
   const pathname = usePathname();
+  const queryClient = useQueryClient();
 
   const { data: session } = useSession();
 
@@ -43,6 +47,24 @@ export default function UsersList() {
   })
 
   const { mutate: sendFriendRequest } = useSendFriendRequest();
+  const { mutate: deleteFriendRequest } = useDeleteFriendRequest();
+
+    useEffect(() => {
+    if (!session?.user?.id) return;
+
+    pusherClient.subscribe(session.user.id);
+
+    const handler = (data: { senderId: string }) => {
+      queryClient.invalidateQueries({ queryKey: ['sentRequests'] });
+    };
+
+    pusherClient.bind('friend:request', handler);
+
+    return () => {
+      pusherClient.unsubscribe(session?.user?.id as string);
+      pusherClient.unbind('friend:request', handler);
+    };
+  }, [session?.user?.id, queryClient]);
 
   return (
     <div className="flex flex-col gap-3 h-full bg-background p-1.5 rounded-xl overflow-x-hidden min-w-fit">
@@ -61,7 +83,10 @@ export default function UsersList() {
                 </div>
               </div>
               {alreadyRequested ? (
-                  <IoCheckmark className="w-4 h-4" />
+                  <IoCheckmark
+                    className="w-4 h-4 cursor-pointer"
+                    onClick={() => deleteFriendRequest(user.id)}
+                    />
                 ) : (
                   <IoPersonAddOutline
                     className="w-4 h-4 cursor-pointer"

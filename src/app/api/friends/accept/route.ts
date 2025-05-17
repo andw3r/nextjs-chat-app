@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth,} from "@/lib/auth";
 import { db } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher";
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -21,7 +22,6 @@ export async function POST(req: Request) {
     return new NextResponse("No friend request found", { status: 404 });
   }
 
-  // Create mutual friend records
   await db.friend.createMany({
     data: [
       { userId: session.user.id, friendId: senderId },
@@ -31,6 +31,10 @@ export async function POST(req: Request) {
 
   await db.friendRequest.delete({
     where: { id: request.id },
+  });
+
+  await pusherServer.trigger(senderId, 'friend:accepted', {
+    receiverId: session.user.id,
   });
 
   return new NextResponse("Friend request accepted", { status: 200 });
