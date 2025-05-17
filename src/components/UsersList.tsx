@@ -64,59 +64,6 @@ export default function UsersList() {
     };
   }, [session?.user?.id, queryClient]);
 
-  useEffect(() => {
-    if (!session?.user?.id) return;
-
-    pusherClient.subscribe(session.user.id);
-
-    const handler = (data: { senderId: string }) => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-      queryClient.invalidateQueries({ queryKey: ['friends'] });
-    };
-
-    pusherClient.bind('friend:accepted', handler);
-
-    return () => {
-      pusherClient.unsubscribe(session.user.id as string);
-      pusherClient.unbind('friend:accepted', handler);
-    };
-  }, [session?.user?.id, queryClient]);
-
-  useEffect(() => {
-    if (!session?.user?.id) return;
-
-    pusherClient.subscribe(session.user.id);
-
-    const handler = (data: { senderId: string }) => {
-      queryClient.invalidateQueries({ queryKey: ['sentRequests'] });
-    };
-
-    pusherClient.bind('friend:accepted', handler);
-
-    return () => {
-      pusherClient.unsubscribe(session.user.id as string);
-      pusherClient.unbind('friend:accepted', handler);
-    };
-  }, [session?.user?.id, queryClient]);
-
-  useEffect(() => {
-    if (!session?.user?.id) return;
-
-    pusherClient.subscribe(session.user.id);
-
-    const handler = (data: { senderId: string }) => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-      queryClient.invalidateQueries({ queryKey: ['friends'] });
-    };
-
-    pusherClient.bind('friend:confirmed', handler);
-
-    return () => {
-      pusherClient.unsubscribe(session.user.id as string);
-      pusherClient.unbind('friend:confirmed', handler);
-    };
-  }, [session?.user?.id, queryClient]);
-
   return (
     <div className="flex flex-col gap-3 h-full bg-background p-1.5 rounded-xl overflow-x-hidden min-w-fit">
       {users.map((user: UserList) => {

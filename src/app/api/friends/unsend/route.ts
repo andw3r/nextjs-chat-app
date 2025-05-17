@@ -28,7 +28,9 @@ export async function DELETE(req: Request) {
     where: { id: request.id },
   });
 
-  await pusherServer.trigger(currentUserId, 'friend:unsend');
+  await pusherServer.trigger(currentUserId, 'friend:unsend',  {
+    receiverId: request.receiverId,
+  });
 
   return new NextResponse("Friend request unsent", { status: 200 });
 }

@@ -68,17 +68,23 @@ export default function ChatBox({ conversationId, messages: initialMessages }: C
   return (
     <main className="w-full h-[calc(100vh-80px)] relative flex flex-col gap-8 bg-primary-gray rounded-xl">
       <div className="w-full flex flex-col flex-1 overflow-y-auto px-3 gap-5">
-        {messages.map((msg) => (
-          <div ref={bottomRef} key={msg.id} className={`flex flex-col gap-1.5 w-full ${msg.sender.id === session?.user?.id ? "items-end" : "items-start"}`}>
-            <div className={`flex gap-2 items-center ${msg.sender.id === session?.user?.id && "flex-row-reverse"}`}>
-              <ProfilePicture customName={msg.sender.name} customPicture={msg.sender.image} size={38} />
-              <div className="flex flex-col gap-1.5">
-                <h3 className="text-sm select-none">{msg.sender.name}</h3>
-                <p className="text-sm">{msg.body}</p>
+        {messages.length > 0 ? (
+          messages.map((msg) => (
+            <div ref={bottomRef} key={msg.id} className={`flex flex-col gap-1.5 w-full ${msg.sender.id === session?.user?.id ? "items-end" : "items-start"}`}>
+              <div className={`flex gap-2 items-center ${msg.sender.id === session?.user?.id && "flex-row-reverse"}`}>
+                <ProfilePicture customName={msg.sender.name} customPicture={msg.sender.image} size={38} />
+                <div className="flex flex-col gap-1.5">
+                  <h3 className="text-sm select-none">{msg.sender.name}</h3>
+                  <p className="text-sm">{msg.body}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+          ) : (
+            <div className="flex flex-col gap-1.5 w-full h-full items-center justify-center">
+              <h3 className="text-sm select-none">No messages yet</h3>
+            </div>
+          )}
       </div>
 
       <div className="w-[calc(100%-24px)] h-12 flex mx-auto relative bottom-6 bg-secondary-gray rounded-xl">
