@@ -65,12 +65,12 @@ export default function Login() {
 
   return (
     <section className="flex w-full h-full">
-      <div className="w-[460] flex flex-col self-center mx-auto rounded-xl bg-primary-gray p-5">
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="w-full h-full sm:h-auto sm:w-[460] flex flex-col justify-center sm:self-center mx-auto sm:rounded-xl bg-primary-gray p-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
 
-          <h1 className="text-3xl text-center mb-4">{isLogin ? "Login" : "Sign up"}</h1>
+          <h1 className="text-3xl text-center sm:mb-4">{isLogin ? "Login" : "Sign up"}</h1>
 
-          <div className="flex flex-col h-full justify-center">
+          <div className="flex flex-col h-full sm:justify-center">
             <div className="flex flex-col gap-5">
               {!isLogin && (
                 <div className="flex flex-col gap-1.5">

@@ -16,7 +16,7 @@ export default function Home() {
 
   return (
     <div className="flex h-full w-full justify-center items-center gap-3">
-      <div className="flex flex-col items-center justify-center text-center w-1/2 text-lg">
+      <div className="flex flex-col items-center justify-center text-center sm:w-1/2 sm:text-lg">
         <p>Welcome to Real time chat app!</p>
         <div>Start using the chat by <Link href="/login" className="underline text-button-yellow">signing up</Link> a new account.</div>
       </div>
