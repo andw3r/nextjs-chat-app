@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface MessageProps {
   message: string;
@@ -6,6 +6,7 @@ interface MessageProps {
 }
 
 export function useSendMessage() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ message, conversationId }: MessageProps) => {
       if (!conversationId) throw new Error("Invalid conversation ID");
@@ -19,6 +20,10 @@ export function useSendMessage() {
       if (!res.ok) throw new Error("Failed to send message");
       return res.json();
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ["friends"]});
+    },
+
     onError: (err) => {
       console.error("Send message error:", err);
     },

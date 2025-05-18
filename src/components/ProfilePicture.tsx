@@ -2,7 +2,6 @@
 
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { BsPersonCircle } from "react-icons/bs";
 import LetterAvatar from "./LetterAvatar";
 
 interface ProfilePictureProps {

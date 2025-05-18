@@ -26,9 +26,9 @@ export default function ConversationPage() {
 
   return (
     <div className="flex w-full gap-3">
-
       <div className="hidden lg:flex">
-      <FriendsList /></div>
+        <FriendsList />
+      </div>
       <div className="flex flex-col gap-3 h-full w-full">
         <Header />
         <ChatBox conversationId={conversationId} messages={messages} />
