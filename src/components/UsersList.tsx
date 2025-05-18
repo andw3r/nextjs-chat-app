@@ -24,7 +24,7 @@ export default function UsersList() {
 
   const { data: session } = useSession();
 
-  const { data: users = [] } = useQuery({
+  const { data: users = [], isLoading: usersLoading, error: usersError } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
       const res = await fetch('/api/users/non-friends');
@@ -33,6 +33,7 @@ export default function UsersList() {
     },
     enabled: !!session?.user?.id,
   });
+
 
   const { data: sentRequests = [] } = useQuery({
     queryKey: ['sentRequests'],
@@ -63,6 +64,9 @@ export default function UsersList() {
       pusherClient.unbind('friend:request', handler);
     };
   }, [session?.user?.id, queryClient]);
+
+  if (usersLoading) return <div className="flex flex-col justify-center items-center gap-3 h-full bg-background p-1.5 rounded-xl overflow-x-hidden min-w-full sm:min-w-[252px]">Loading users...</div>;
+  if (usersError || !users) return <div className="flex flex-col gap-3 h-full bg-background p-1.5 rounded-xl overflow-x-hidden min-w-20">Failed to load users.</div>;
 
   return (
     <div className="flex flex-col gap-3 h-full bg-background p-1.5 rounded-xl overflow-x-hidden min-w-fit">

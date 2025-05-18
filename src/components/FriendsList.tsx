@@ -1,11 +1,8 @@
 "use client";
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useSession } from "next-auth/react";
+import { useQuery } from '@tanstack/react-query';
 import ProfilePicture from "./ProfilePicture";
 import { useStartConversation } from '@/hooks/useStartConversation';
-import { useParams } from 'next/navigation';
-import { useCallback } from 'react';
 
 interface FriendsList {
   id: string;
@@ -18,7 +15,7 @@ interface FriendsList {
 
 export default function FriendsList() {
 
-  const { data: friends = [] } = useQuery({
+  const { data: friends = [], isLoading, error } = useQuery({
     queryKey: ['friends'],
     queryFn: async () => {
       const res = await fetch('/api/friends');
@@ -29,6 +26,9 @@ export default function FriendsList() {
 
   const { mutate: startConversation } = useStartConversation();
 
+  if (isLoading) return <div className="flex flex-col justify-center items-center gap-3 h-full bg-background p-1.5 rounded-xl overflow-x-hidden min-w-full sm:min-w-[252px]">Loading friends...</div>;
+  if (error || !friends) return <div className="flex flex-col justify-center items-center gap-3 h-full bg-background p-1.5 rounded-xl overflow-x-hidden min-w-full sm:min-w-[252px]">Failed to load friends.</div>;
+  if (friends.length === 0) return <div className="flex flex-col justify-center items-center gap-3 h-full bg-background p-1.5 rounded-xl overflow-x-hidden min-w-full sm:min-w-[252px]">No friends yet.</div>;
   return (
     <div className="flex flex-col gap-3 h-full bg-background p-1.5 rounded-xl overflow-x-hidden min-w-fit">
       {friends.map((friend: FriendsList) => {

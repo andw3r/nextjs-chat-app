@@ -6,7 +6,6 @@ import { useSendMessage } from "@/hooks/useSendMessage";
 import ProfilePicture from "./ProfilePicture";
 import { useSession } from "next-auth/react";
 import { pusherClient } from "@/lib/pusher";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface Message {
   id: string;
@@ -33,6 +32,13 @@ export default function ChatBox({ conversationId, messages: initialMessages }: C
 
   const { mutate: sendMessage } = useSendMessage();
   const bottomRef = useRef<HTMLDivElement>(null);
+  const hasMountedRef = useRef(false);
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      bottomRef.current?.scrollIntoView({ behavior: "auto" });
+      hasMountedRef.current = true;
+    }
+  }, []);
 
   useEffect(() => {
     pusherClient.subscribe(conversationId);
@@ -50,7 +56,9 @@ export default function ChatBox({ conversationId, messages: initialMessages }: C
   }, [conversationId]);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (hasMountedRef.current) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   const sendMessageHandler = () => {

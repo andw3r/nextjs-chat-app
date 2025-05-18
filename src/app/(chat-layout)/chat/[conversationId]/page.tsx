@@ -21,8 +21,7 @@ export default function ConversationPage() {
     enabled: !!conversationId,
   });
 
-  if (isLoading) return <div>Loading chat...</div>;
-  if (error || !messages) return <div>Failed to load messages.</div>;
+
 
   return (
     <div className="flex w-full gap-3">
@@ -31,7 +30,20 @@ export default function ConversationPage() {
       </div>
       <div className="flex flex-col gap-3 h-full w-full">
         <Header />
-        <ChatBox conversationId={conversationId} messages={messages} />
+      {isLoading ? (
+        <main className="w-full h-[calc(100vh-140px)] lg:h-[calc(100vh-80px)] flex items-center justify-center bg-primary-gray rounded-xl">
+          Loading chat...
+        </main>
+      ) : error || !messages ? (
+        <main className="w-full h-[calc(100vh-140px)] lg:h-[calc(100vh-80px)] flex items-center justify-center bg-primary-gray rounded-xl">
+          Failed to load messages.
+        </main>
+      ) : (
+        <ChatBox
+          conversationId={conversationId}
+          messages={messages}
+        />
+      )}
       </div>
     </div>
   )
