@@ -7,15 +7,11 @@ export default async function ChatLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
+
 
   return (
-    <div className="flex w-full gap-3">
-      <FriendsList />
-      <div className="flex flex-col gap-3 w-full">
-        <Header />
-        {children}
-      </div>
+    <div className="flex w-full h-full lg:h-auto gap-3">
+      {children}
     </div>
   );
 }

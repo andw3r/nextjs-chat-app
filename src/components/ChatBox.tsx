@@ -66,8 +66,8 @@ export default function ChatBox({ conversationId, messages: initialMessages }: C
   };
 
   return (
-    <main className="w-full h-[calc(100vh-80px)] relative flex flex-col gap-8 bg-primary-gray rounded-xl">
-      <div className="w-full flex flex-col flex-1 overflow-y-auto px-3 gap-5">
+    <main className="w-full h-[calc(100vh-140px)] lg:h-[calc(100vh-80px)] relative flex flex-col gap-8 bg-primary-gray rounded-xl">
+      <div className="w-full flex flex-col flex-1 overflow-y-auto px-3 gap-5 justify-end">
         {messages.length > 0 ? (
           messages.map((msg) => (
             <div ref={bottomRef} key={msg.id} className={`flex flex-col gap-1.5 w-full ${msg.sender.id === session?.user?.id ? "items-end" : "items-start"}`}>
