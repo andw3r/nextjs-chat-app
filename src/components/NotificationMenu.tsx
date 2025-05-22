@@ -23,7 +23,7 @@ export default function NotificationMenu() {
 
   const queryClient = useQueryClient();
 
-  const { data: pendingRequests = [] } = useQuery({
+  const { data: pendingRequests = [], isLoading: pendingRequestsLoading, error: pendingRequestsError } = useQuery({
     queryKey: ['pendingRequests'],
     queryFn: async () => {
       const res = await fetch('/api/friends/pending')
@@ -78,7 +78,7 @@ export default function NotificationMenu() {
 
   const { mutate: deletePendingRequest } = useDeletePendingRequest();
 
-    useEffect(() => {
+  useEffect(() => {
     if (!session?.user?.id) return;
 
     pusherClient.subscribe(session.user.id);
@@ -150,6 +150,15 @@ export default function NotificationMenu() {
               ) : (
                 <h5 className="text-md font-medium text-center select-none">Friend requests</h5>
               )}
+              {pendingRequestsLoading ? (
+                <div className="flex flex-col gap-2 p-3">
+                  <h5 className="text-md font-medium text-center select-none">Loading friend requests...</h5>
+                </div>
+              ) : pendingRequestsError ? (
+                <div className="flex flex-col gap-2 p-3">
+                  <h5 className="text-md font-medium text-center select-none">Failed to load friend requests.</h5>
+                </div>
+              ) : (
               <div className="flex flex-col gap-2">
                 {pendingRequests.map((req: PendingRequest) => {
                   return (
@@ -173,6 +182,7 @@ export default function NotificationMenu() {
                   )
                 })}
               </div>
+              )}
             </div>
           </div>
         </DropdownMenuContent>

@@ -9,6 +9,7 @@ export async function GET() {
     if (!session?.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+    const currentUserId = session.user.id;
 
     const friends = await db.friend.findMany({
       where: { user: { id: session.user.id } },
@@ -20,7 +21,56 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     });
 
-    const formattedFriends = friends.map((entry) => entry.friend);
+    const enrichedFriends = await Promise.all(
+      friends.map(async (friend) => {
+        const conversation = await db.conversation.findFirst({
+          where: {
+            userIds: {
+              hasEvery: [currentUserId, friend.friend.id],
+            },
+          },
+          select: {
+            id: true,
+          },
+        });
+
+        if (!conversation) {
+          return {
+            ...friend,
+            lastMessage: null,
+            fromMe: false,
+          };
+        }
+
+        const lastMessage = await db.message.findFirst({
+          where: {
+            conversationId: conversation.id,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          select: {
+            body: true,
+            senderId: true,
+          },
+        });
+
+        return {
+          ...friend,
+          conversationId: conversation?.id ?? null,
+          lastMessage: lastMessage?.body || null,
+          fromMe: lastMessage?.senderId === currentUserId,
+        };
+      })
+    );
+
+    const formattedFriends = enrichedFriends.map((entry) => ({
+      id: entry.friend.id,
+      name: entry.friend.name,
+      image: entry.friend.image,
+      lastMessage: entry.lastMessage,
+      fromMe: entry.fromMe,
+    }));
 
     return NextResponse.json(formattedFriends);
   } catch (error) {

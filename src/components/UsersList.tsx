@@ -24,7 +24,7 @@ export default function UsersList() {
 
   const { data: session } = useSession();
 
-  const { data: users = [] } = useQuery({
+  const { data: users = [], isLoading: usersLoading, error: usersError } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
       const res = await fetch('/api/users/non-friends');
@@ -33,6 +33,7 @@ export default function UsersList() {
     },
     enabled: !!session?.user?.id,
   });
+
 
   const { data: sentRequests = [] } = useQuery({
     queryKey: ['sentRequests'],
@@ -64,6 +65,9 @@ export default function UsersList() {
     };
   }, [session?.user?.id, queryClient]);
 
+  if (usersLoading) return <div className="flex flex-col justify-center items-center gap-3 h-full bg-background p-1.5 rounded-xl overflow-x-hidden min-w-full sm:min-w-[252px]">Loading users...</div>;
+  if (usersError || !users) return <div className="flex flex-col gap-3 h-full bg-background p-1.5 rounded-xl overflow-x-hidden min-w-20">Failed to load users.</div>;
+
   return (
     <div className="flex flex-col gap-3 h-full bg-background p-1.5 rounded-xl overflow-x-hidden min-w-fit">
       {users.map((user: UserList) => {
@@ -71,7 +75,7 @@ export default function UsersList() {
           (req: PendingRequest) => req.senderId === session?.user?.id && req.receiverId === user.id
         );
         return (
-          <div key={user?.id} className={`${pathname === "/chat" ? "cursor-pointer" : ""} min-h-14 bg-primary-gray border rounded-xl flex w-60`}>
+          <div key={user?.id} className={`${pathname === "/chat" ? "cursor-pointer" : ""} w-full sm:w-60 min-h-14 bg-primary-gray border rounded-xl flex`}>
             <div className="flex w-full justify-between items-center gap-2 mx-2">
               <div className="flex gap-2 items-center">
                 <ProfilePicture customName={user.name} customPicture={user.image} size={32} />

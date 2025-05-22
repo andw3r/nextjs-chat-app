@@ -12,6 +12,6 @@ export default function ActionIcon({
   onClick,
 }: Readonly<ActionIconProps>) {
   return (
-    <div onClick={onClick} className={active ? "bg-amber-200 text-black " : "bg-primary-gray border " + "h-9 w-9 rounded-md flex justify-center items-center"}>{children}</div>
+    <div onClick={onClick} className={`${active ? "bg-accent" : "bg-primary-gray"}  border h-9 w-9 rounded-md flex justify-center items-center`}>{children}</div>
   );
 }
