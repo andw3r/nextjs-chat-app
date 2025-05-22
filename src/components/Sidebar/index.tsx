@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import ActionIcon from "../ActionIcon";
 import ProfileButton from "../ProfilePicture";
 import { BsChatDots } from "react-icons/bs";

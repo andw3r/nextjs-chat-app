@@ -1,7 +1,7 @@
 "use client";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form"
 
@@ -10,7 +10,7 @@ export default function Login() {
   const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
 
-  const { status, data: session } = useSession();
+  const { status } = useSession();
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -18,7 +18,7 @@ export default function Login() {
     }
   }, [status, router]);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FieldValues>({
+  const { register, handleSubmit } = useForm<FieldValues>({
     defaultValues: {
       name: "",
       email: "",

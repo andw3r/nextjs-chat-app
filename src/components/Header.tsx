@@ -2,8 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import NotificationMenu from "./NotificationMenu";
-import { useState } from "react";
-
 
 export default function Header() {
   const pathName = usePathname();

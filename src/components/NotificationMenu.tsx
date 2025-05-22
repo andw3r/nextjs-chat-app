@@ -83,7 +83,7 @@ export default function NotificationMenu() {
 
     pusherClient.subscribe(session.user.id);
 
-    const handler = (data: { senderId: string }) => {
+    const handler = () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       queryClient.invalidateQueries({ queryKey: ['friends'] });
     };
@@ -101,7 +101,7 @@ export default function NotificationMenu() {
 
     pusherClient.subscribe(session.user.id);
 
-    const handler = (data: { senderId: string }) => {
+    const handler = () => {
       queryClient.invalidateQueries({ queryKey: ['sentRequests'] });
     };
 
@@ -118,7 +118,7 @@ export default function NotificationMenu() {
 
     pusherClient.subscribe(session.user.id);
 
-    const handler = (data: { senderId: string }) => {
+    const handler = () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       queryClient.invalidateQueries({ queryKey: ['friends'] });
     };

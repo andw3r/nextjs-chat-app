@@ -19,7 +19,7 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async jwt(jwt) {
-      const { token, user } = jwt;
+      const { token} = jwt;
 
       if (!token.sub) return token;
       const existingUser = await getUserById(token.sub);
@@ -32,7 +32,7 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
       return token;
     },
 
-    async session({ session, user, token }) {
+    async session({ session, token }) {
       if (session.user) {
         if (token.role) session.user.role = token.role as UserRole;
         if (token.sub) session.user.id = token.sub;

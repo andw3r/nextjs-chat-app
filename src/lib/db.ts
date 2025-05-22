@@ -1,8 +1,10 @@
+/* eslint-disable no-var */
 import { PrismaClient } from "@prisma/client";
 
 declare global {
   var prisma: PrismaClient | undefined;
 }
+/* eslint-enable no-var */
 
 export const db = global.prisma || new PrismaClient();
 

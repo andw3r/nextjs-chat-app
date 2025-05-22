@@ -19,7 +19,8 @@ const getConversationById = async (conversationId: string) => {
     });
 
     return conversation;
-  } catch (error: any) {
+  } catch (error) {
+    console.log("Error occurred while fetching conversation:", error);
     return null;
   }
 };

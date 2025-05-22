@@ -53,7 +53,7 @@ export default function UsersList() {
 
     pusherClient.subscribe(session.user.id);
 
-    const handler = (data: { senderId: string }) => {
+    const handler = () => {
       queryClient.invalidateQueries({ queryKey: ['sentRequests'] });
     };
 

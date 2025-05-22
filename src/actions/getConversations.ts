@@ -31,7 +31,8 @@ const getConversations = async () => {
     });
 
     return conversations;
-  } catch (error: any) {
+  } catch (error) {
+    console.log("Error occurred while fetching conversations:", error);
     return [];
   }
 };

@@ -63,7 +63,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(newConversation);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error in conversation creation:", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
