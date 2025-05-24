@@ -8,8 +8,6 @@ export const signUpSchema = object({
     .email("Invalid email"),
   password: string({ required_error: "Password is required" })
     .min(1, "Password is required")
-    .min(8, "Password must be more than 8 characters")
-    .max(32, "Password must be less than 32 characters"),
 })
 
 export const signInSchema = object({
@@ -17,6 +15,4 @@ export const signInSchema = object({
     .min(1, "Email is required")
     .email("Invalid email or password"),
   password: string({ required_error: "Password is required" })
-    .min(1, "Password is required")
-    .email("Invalid email or password"),
-})
+});
